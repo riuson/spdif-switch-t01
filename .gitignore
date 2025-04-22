@@ -1,0 +1,5 @@
+.vscode/
+[Bb]uild/
+Output/
+env-cmake.json
+CMakeFiles/

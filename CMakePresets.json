@@ -1,0 +1,58 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 29,
+        "patch": 0
+    },
+    "include": [
+        "./env-cmake.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Default build using Ninja generator",
+            "inherits": "machine_dependent_configuration",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/../build/${presetName}",
+            "toolchainFile": "${sourceDir}/gcc-toolchain.cmake"
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "displayName": "Build",
+            "configurePreset": "debug",
+            "jobs": 16,
+            "targets": [
+                "firmware"
+            ]
+        },
+        {
+            "name": "release",
+            "displayName": "Build",
+            "configurePreset": "release",
+            "jobs": 16,
+            "targets": [
+                "firmware"
+            ]
+        }
+    ]
+}

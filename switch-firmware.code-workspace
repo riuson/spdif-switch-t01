@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"C_Cpp.formatting": "Disabled",
+		"cortex-debug.enableTelemetry": false,
+		"cortex-debug.JLinkGDBServerPath": "${workspaceRoot}/Tools/JLink/JLinkGDBServerCL.exe",
+		"c-cpp-flylint.clang.enable": false,
+		"c-cpp-flylint.flexelint.enable": false,
+		"c-cpp-flylint.standard": [
+			"c11",
+			"c++17"
+		],
+	}
+}

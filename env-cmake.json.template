@@ -1,0 +1,18 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 29,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "machine_dependent_configuration",
+            "hidden": true,
+            "generator": "Ninja",
+            "environment": {
+                "PATH": "MinGW/mingw/bin;GCC/gcc/bin;CMake/cmake/bin;Ninja/ninja;CLang/bin;$penv{PATH}"
+            }
+        }
+    ]
+}
