@@ -1,3 +1,5 @@
-include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/app)
+set(INCDIR ${CMAKE_CURRENT_LIST_DIR})
+
+include_directories(${INCDIR})
+include_directories(${INCDIR}/includes)
 # ...

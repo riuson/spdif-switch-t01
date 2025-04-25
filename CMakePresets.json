@@ -15,7 +15,7 @@
             "description": "Default build using Ninja generator",
             "inherits": "machine_dependent_configuration",
             "hidden": true,
-            "binaryDir": "${sourceDir}/../build/${presetName}",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "toolchainFile": "${sourceDir}/gcc-toolchain.cmake"
         },
         {
