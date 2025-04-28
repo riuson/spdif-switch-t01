@@ -7,8 +7,8 @@ function(configure_compiler TARGET_NAME)
     target_compile_definitions(
         ${TARGET_NAME} PUBLIC
         $<$<BOOL:${IS_DEBUG}>:DEBUG=1 TRACE=1>
-        STM32F030F4
-        STM32F030F4P6
+        STM32F030x8
+        USE_FULL_LL_DRIVER
     )
 
     target_compile_options(
@@ -25,7 +25,7 @@ function(configure_compiler TARGET_NAME)
 endfunction()
 
 function(configure_linker TARGET_NAME)
-    set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/source/startup/stm32f030f4.ld")
+    set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/Source/Startup/STM32F030F4Px_FLASH.ld")
 
     target_link_options(
         ${TARGET_NAME} PRIVATE
