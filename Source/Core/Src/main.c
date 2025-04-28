@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stm32f0xx.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -105,6 +105,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    while (!LL_USART_IsActiveFlag_TXE(USART1)) {} // Wait until TX buffer empty
+    LL_USART_TransmitData8(USART1, 0x55);
   }
   /* USER CODE END 3 */
 }
