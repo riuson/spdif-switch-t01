@@ -46,14 +46,14 @@ void MX_TIM1_Init(void) {
     GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
     GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-    GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+    GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
     GPIO_InitStruct.Alternate = LL_GPIO_AF_2;
     LL_GPIO_Init(REMOTE_INPUT_GPIO_Port, &GPIO_InitStruct);
 
     /* USER CODE BEGIN TIM1_Init 1 */
 
     /* USER CODE END TIM1_Init 1 */
-    TIM_InitStruct.Prescaler = 0;
+    TIM_InitStruct.Prescaler = (SystemCoreClock / 1000000) - 1; // set 1 us resolution
     TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
     TIM_InitStruct.Autoreload = 65535;
     TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
@@ -66,7 +66,7 @@ void MX_TIM1_Init(void) {
     LL_TIM_IC_SetActiveInput(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_ACTIVEINPUT_DIRECTTI);
     LL_TIM_IC_SetPrescaler(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_ICPSC_DIV1);
     LL_TIM_IC_SetFilter(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_IC_FILTER_FDIV1);
-    LL_TIM_IC_SetPolarity(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_IC_POLARITY_RISING);
+    LL_TIM_IC_SetPolarity(TIM1, LL_TIM_CHANNEL_CH2, LL_TIM_IC_POLARITY_BOTHEDGE);
     /* USER CODE BEGIN TIM1_Init 2 */
 
     /* USER CODE END TIM1_Init 2 */

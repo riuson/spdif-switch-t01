@@ -45,7 +45,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+#define RemoteControlCaptureBufferSize (512)
+uint16_t remoteControlCaptureBufferIndex;
+uint16_t remoteControlCaptureBuffer[RemoteControlCaptureBufferSize];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -80,7 +82,7 @@ int main(void) {
     NVIC_SetPriority(SysTick_IRQn, 3);
 
     /* USER CODE BEGIN Init */
-
+    remoteControlCaptureBufferIndex = 0;
     /* USER CODE END Init */
 
     /* Configure the system clock */
@@ -98,6 +100,17 @@ int main(void) {
     LL_GPIO_SetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
     LL_GPIO_SetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
     LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
+
+    // LL_TIM_IC_Enable(TIM1, LL_TIM_CHANNEL_CH2);
+    LL_TIM_EnableIT_CC2(TIM1);
+    NVIC_SetPriority(TIM1_CC_IRQn, 0);
+    NVIC_EnableIRQ(TIM1_CC_IRQn);
+    LL_TIM_EnableCounter(TIM1);
+    LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH2);
+    LL_TIM_EnableIT_CC2(TIM1);
+    NVIC_EnableIRQ(TIM1_CC_IRQn);
+    LL_TIM_EnableCounter(TIM1);
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -142,6 +155,33 @@ void SystemClock_Config(void) {
 }
 
 /* USER CODE BEGIN 4 */
+void TIM1_CC_IRQHandler(void) {
+    if (LL_TIM_IsActiveFlag_CC2(TIM1)) {
+        static uint32_t prev_capture = 0;
+        uint32_t current_capture = LL_TIM_IC_GetCaptureCH2(TIM1);
+        uint32_t interval = current_capture - prev_capture;
+
+        // Handle overflow (0xFFFF -> 0)
+        if (interval > 0x7FFF) {
+            interval += 0x10000;
+        }
+
+        remoteControlCaptureBuffer[remoteControlCaptureBufferIndex++] = interval;
+
+        if (remoteControlCaptureBufferIndex >= RemoteControlCaptureBufferSize) {
+            remoteControlCaptureBufferIndex = 0;
+        }
+
+        prev_capture = current_capture;
+        LL_TIM_ClearFlag_CC2(TIM1);
+
+        // Toggle edge detection for next capture
+        LL_TIM_IC_SetPolarity(TIM1, LL_TIM_CHANNEL_CH2,
+            (LL_TIM_IC_GetPolarity(TIM1, LL_TIM_CHANNEL_CH2) == LL_TIM_IC_POLARITY_RISING)
+                ? LL_TIM_IC_POLARITY_FALLING
+                : LL_TIM_IC_POLARITY_RISING);
+    }
+}
 
 /* USER CODE END 4 */
 
