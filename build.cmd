@@ -1,5 +1,5 @@
-cmake --preset=debug
+@REM cmake --preset=debug
 cmake --build --preset=debug --target=firmware
 
-cmake --preset=release
+@REM cmake --preset=release
 cmake --build --preset=release --target=firmware
