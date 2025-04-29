@@ -54,6 +54,7 @@ uint16_t remoteControlCaptureBuffer[RemoteControlCaptureBufferSize];
 void SystemClock_Config(void);
 
 /* USER CODE BEGIN PFP */
+int decodeRemote(const uint16_t* timings, int count);
 
 /* USER CODE END PFP */
 
@@ -105,7 +106,6 @@ int main(void) {
     LL_TIM_EnableIT_CC2(TIM1);
     NVIC_SetPriority(TIM1_CC_IRQn, 0);
     NVIC_EnableIRQ(TIM1_CC_IRQn);
-    LL_TIM_EnableCounter(TIM1);
     LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH2);
     LL_TIM_EnableIT_CC2(TIM1);
     NVIC_EnableIRQ(TIM1_CC_IRQn);
@@ -119,9 +119,14 @@ int main(void) {
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */
         LL_mDelay(500);
-        LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
-        LL_mDelay(500);
-        LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
+
+        LL_TIM_DisableCounter(TIM1);
+        if (decodeRemote(remoteControlCaptureBuffer, RemoteControlCaptureBufferSize) != 0) {
+            LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
+            LL_mDelay(50);
+            LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
+        }
+        LL_TIM_EnableCounter(TIM1);
     }
     /* USER CODE END 3 */
 }
@@ -181,6 +186,30 @@ void TIM1_CC_IRQHandler(void) {
                 ? LL_TIM_IC_POLARITY_FALLING
                 : LL_TIM_IC_POLARITY_RISING);
     }
+}
+
+int decodeRemote(const uint16_t* timings, int count) {
+    int isAllFits = 1;
+    for (int i = 0; i < count; ++i) {
+        uint16_t t = timings[i];
+        if (t >= 300 && t <= 500) {
+            // 1 pulse.
+            continue;
+        }
+        if (t >= 3 * 300 && t <= 3 * 500) {
+            // 3 pulses.
+            continue;
+        }
+        if (t >= 32 * 300 && t <= 32 * 500) {
+            // sync.
+            continue;
+        }
+
+        isAllFits = 0;
+        break;
+    }
+
+    return isAllFits;
 }
 
 /* USER CODE END 4 */
