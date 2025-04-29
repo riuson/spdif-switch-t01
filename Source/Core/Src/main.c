@@ -45,7 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-#define RemoteControlCaptureBufferSize (512)
+#define RemoteControlCaptureBufferSize (128)
 uint16_t remoteControlCaptureBufferIndex;
 uint16_t remoteControlCaptureBuffer[RemoteControlCaptureBufferSize];
 /* USER CODE END PV */
@@ -188,25 +188,64 @@ void TIM1_CC_IRQHandler(void) {
     }
 }
 
+int checkIntervalInRange(int actual, int expected, int tolerance) {
+    return ((actual > (expected - tolerance)) && (actual < (expected + tolerance))) ? 1 : 0;
+}
+
 int decodeRemote(const uint16_t* timings, int count) {
+    // Verify for all intervals in limits.
     int isAllFits = 1;
-    for (int i = 0; i < count; ++i) {
+    int pulse1 = 0;
+    int pulse3 = 0;
+    int sync = 0;
+    int i;
+
+    for (i = 0; i < count; ++i) {
         uint16_t t = timings[i];
         if (t >= 300 && t <= 500) {
-            // 1 pulse.
+            // pulse1 = t;
             continue;
         }
         if (t >= 3 * 300 && t <= 3 * 500) {
-            // 3 pulses.
+            // pulse3 = t;
             continue;
         }
         if (t >= 32 * 300 && t <= 32 * 500) {
-            // sync.
+            sync = t;
             continue;
         }
 
         isAllFits = 0;
         break;
+    }
+
+    if (!isAllFits) {
+        return isAllFits;
+    }
+
+    int sync_div_31 = sync / 31;
+
+    for (i = 0; i < count; ++i) {
+        uint16_t t = timings[i];
+        if (checkIntervalInRange(t, sync_div_31, 150)) {
+            pulse1 = t;
+            continue;
+        }
+        if (checkIntervalInRange(t, 3 * sync_div_31, 150)) {
+            pulse3 = t;
+            continue;
+        }
+        if (checkIntervalInRange(t, 31 * sync_div_31, 250)) {
+            sync = t;
+            continue;
+        }
+
+        isAllFits = 0;
+        break;
+    }
+
+    if (!isAllFits) {
+        return isAllFits;
     }
 
     return isAllFits;
