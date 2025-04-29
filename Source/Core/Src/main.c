@@ -93,9 +93,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM1_Init();
-  MX_USART1_UART_Init();
+  // MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  LL_GPIO_SetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
+  LL_GPIO_SetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
+  LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,10 +105,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
-    while (!LL_USART_IsActiveFlag_TXE(USART1)) {} // Wait until TX buffer empty
-    LL_USART_TransmitData8(USART1, 0x55);
+    LL_mDelay(500);
+    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
+    LL_mDelay(500);
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
   }
   /* USER CODE END 3 */
 }
