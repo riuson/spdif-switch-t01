@@ -10,6 +10,7 @@ set(CPP_SOURCES
     ${SRCDIR}/Core/Src/main.c
     ${SRCDIR}/Core/Src/remote.c
     ${SRCDIR}/Core/Src/router.c
+    ${SRCDIR}/Core/Src/selector.c
     ${SRCDIR}/Core/Src/stm32f0xx_it.c
     ${SRCDIR}/Core/Src/tim.c
     ${SRCDIR}/Core/Src/usart.c

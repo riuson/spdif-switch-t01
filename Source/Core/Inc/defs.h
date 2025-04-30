@@ -23,4 +23,11 @@ typedef enum {
     RCButton3 = 4,
 } RCButton;
 
+typedef enum {
+    UserSource1,
+    UserSource2,
+    UserSource3,
+    UserSourceAuto,
+} UserSource;
+
 #endif // DEFS_H

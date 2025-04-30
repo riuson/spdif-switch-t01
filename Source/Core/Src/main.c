@@ -27,6 +27,7 @@
 #include "detector.h"
 #include "remote.h"
 #include "router.h"
+#include "selector.h"
 #include "stm32f0xx.h"
 /* USER CODE END Includes */
 
@@ -112,44 +113,10 @@ int main(void) {
         detectorCheckNextSource();
         LL_mDelay(500);
         DetectedSource detectedSources = detectorGetFound();
-        int button = remoteGetButton();
-
-        if ((detectedSources & DetectedSource1) != DetectedSourceNone) {
-            routerSelect(RouterSource1);
-        } else if ((detectedSources & DetectedSource2) != DetectedSourceNone) {
-            routerSelect(RouterSource2);
-        } else if ((detectedSources & DetectedSource3) != DetectedSourceNone) {
-            routerSelect(RouterSource3);
-        } else {
-            routerSelect(RouterSourceNone);
-        }
-
-        switch (button) {
-        case RCButton1: {
-            LL_GPIO_ResetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
-            LL_mDelay(50);
-            LL_GPIO_SetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
-            break;
-        }
-        case RCButton2: {
-            LL_GPIO_ResetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
-            LL_mDelay(50);
-            LL_GPIO_SetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
-            break;
-        }
-        case RCButton3: {
-            LL_GPIO_ResetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
-            LL_mDelay(50);
-            LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
-            break;
-        }
-        case RCButtonAuto: {
-            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
-            LL_mDelay(50);
-            LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
-            break;
-        }
-        }
+        RCButton remoteButton = remoteGetButton();
+        selectorSetRCButton(remoteButton);
+        selectorSetDetectedSources(detectedSources);
+        routerSelect(selectorGetRouterSource());
     }
 
     /* USER CODE END 3 */
