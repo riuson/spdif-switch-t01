@@ -9,6 +9,7 @@ typedef enum {
 } DetectedSource;
 
 typedef enum {
+    RouterSourceNone,
     RouterSource1,
     RouterSource2,
     RouterSource3,

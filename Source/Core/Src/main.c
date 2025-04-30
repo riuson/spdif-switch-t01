@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "detector.h"
 #include "remote.h"
+#include "router.h"
 #include "stm32f0xx.h"
 /* USER CODE END Includes */
 
@@ -112,6 +113,16 @@ int main(void) {
         LL_mDelay(500);
         DetectedSource detectedSources = detectorGetFound();
         int button = remoteGetButton();
+
+        if ((detectedSources & DetectedSource1) != DetectedSourceNone) {
+            routerSelect(RouterSource1);
+        } else if ((detectedSources & DetectedSource2) != DetectedSourceNone) {
+            routerSelect(RouterSource2);
+        } else if ((detectedSources & DetectedSource3) != DetectedSourceNone) {
+            routerSelect(RouterSource3);
+        } else {
+            routerSelect(RouterSourceNone);
+        }
 
         switch (button) {
         case RCButton1: {
