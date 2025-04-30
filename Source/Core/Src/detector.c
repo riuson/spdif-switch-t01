@@ -3,11 +3,11 @@
 #include "gpio.h"
 #include "stm32f0xx.h"
 
-static void detectorSelectSource(DetectedSignalSource channel);
+static void detectorSelectSource(DetectedSource channel);
 static void detectorEnableInput(void);
 static void detectorDisableInput(void);
 
-static DetectedSignalSource currentSignalSource = DetectedSignalSource1;
+static DetectedSource currentSignalSource = DetectedSource1;
 static int interruptsCounter = 0;
 static int signalSourceStates[3] = { 0, 0, 0 };
 
@@ -20,19 +20,19 @@ void detectorCheckNextSource() {
 
     switch (currentSignalSource) {
     default:
-    case DetectedSignalSource1: {
+    case DetectedSource1: {
         signalSourceStates[0] = isDetected;
-        currentSignalSource = DetectedSignalSource2;
+        currentSignalSource = DetectedSource2;
         break;
     }
-    case DetectedSignalSource2: {
+    case DetectedSource2: {
         signalSourceStates[1] = isDetected;
-        currentSignalSource = DetectedSignalSource3;
+        currentSignalSource = DetectedSource3;
         break;
     }
-    case DetectedSignalSource3: {
+    case DetectedSource3: {
         signalSourceStates[2] = isDetected;
-        currentSignalSource = DetectedSignalSource1;
+        currentSignalSource = DetectedSource1;
         break;
     }
     }
@@ -42,38 +42,38 @@ void detectorCheckNextSource() {
     detectorEnableInput();
 }
 
-DetectedSignalSource detectorGetFound(void) {
-    DetectedSignalSource result = DetectedSignalSourceNone;
+DetectedSource detectorGetFound(void) {
+    DetectedSource result = DetectedSourceNone;
 
     if (signalSourceStates[0] != 0) {
-        result |= DetectedSignalSource1;
+        result |= DetectedSource1;
     }
 
     if (signalSourceStates[1] != 0) {
-        result |= DetectedSignalSource2;
+        result |= DetectedSource2;
     }
 
     if (signalSourceStates[2] != 0) {
-        result |= DetectedSignalSource3;
+        result |= DetectedSource3;
     }
 
     return result;
 }
 
-static void detectorSelectSource(DetectedSignalSource source) {
+static void detectorSelectSource(DetectedSource source) {
     switch (source) {
     default:
-    case DetectedSignalSource1: {
+    case DetectedSource1: {
         LL_GPIO_SetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
         LL_GPIO_SetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
         break;
     }
-    case DetectedSignalSource2: {
+    case DetectedSource2: {
         LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
         LL_GPIO_SetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
         break;
     }
-    case DetectedSignalSource3: {
+    case DetectedSource3: {
         LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
         LL_GPIO_ResetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
         break;

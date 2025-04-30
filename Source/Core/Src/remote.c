@@ -3,6 +3,15 @@
 #include "string.h"
 #include "tim.h"
 
+typedef enum {
+    PulseLow1 = 1,
+    PulseHigh1 = 11,
+    PulseLow3 = 3,
+    PulseHigh3 = 13,
+    PulseLowSync = 9,
+    PulseHighSync = 19,
+} Pulse;
+
 #define RemoteControlCaptureBufferSize (128)
 
 static uint16_t remoteControlCaptureBufferIndex = 0;
@@ -14,6 +23,7 @@ static uint8_t sequenceButton2[13] = "1111111100U1";
 static uint8_t sequenceButton3[13] = "1111111100UF";
 
 static int checkIntervalInRange(int actual, int expected, int tolerance);
+static RCButton remoteDecodeButton(void);
 
 void remoteInit(void) {
     // LL_TIM_IC_Enable(TIM1, LL_TIM_CHANNEL_CH2);
@@ -39,7 +49,19 @@ inline void remoteStoreInterval(uint32_t interval, int level) {
     }
 }
 
-int remoteGetButton(void) {
+RCButton remoteGetButton(void) {
+    // Disable receiving.
+    LL_TIM_DisableCounter(TIM1);
+
+    RCButton result = remoteDecodeButton();
+
+    // Re-enable receiving.
+    LL_TIM_EnableCounter(TIM1);
+
+    return result;
+}
+
+RCButton remoteDecodeButton(void) {
     // Verify what all intervals are in limits.
     int isAllFits = 1;
     int sync = 0;

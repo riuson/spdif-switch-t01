@@ -5,6 +5,6 @@
 
 void detectorInit(void);
 void detectorCheckNextSource(void);
-DetectedSignalSource detectorGetFound(void);
+DetectedSource detectorGetFound(void);
 
 #endif // DETECTOR_H

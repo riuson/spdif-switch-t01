@@ -25,7 +25,8 @@
 			"xmemory": "c",
 			"xtree": "c",
 			"xutility": "c",
-			"format": "c"
+			"format": "c",
+			"router.h": "c"
 		},
 		"cortex-debug.liveWatchRefreshRate": 2000,
 		"cortex-debug.dbgServerLogfile": "${workspaceRoot}/jlink.log",
