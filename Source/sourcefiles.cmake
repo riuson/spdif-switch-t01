@@ -5,6 +5,7 @@ set(CPP_SOURCES
     ${SRCDIR}/Startup/syscalls_stub.c
     ${SRCDIR}/Startup/system_stm32f0xx.c
 
+    ${SRCDIR}/Core/Src/detector.c
     ${SRCDIR}/Core/Src/gpio.c
     ${SRCDIR}/Core/Src/main.c
     ${SRCDIR}/Core/Src/remote.c

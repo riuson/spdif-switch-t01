@@ -24,6 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "detector.h"
 #include "remote.h"
 #include "stm32f0xx.h"
 /* USER CODE END Includes */
@@ -99,6 +100,7 @@ int main(void) {
     LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
 
     remoteInit();
+    detectorInit();
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -106,7 +108,28 @@ int main(void) {
     while (1) {
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */
+        // detectorSelectSource(SignalSource1);
+        // LL_mDelay(100);
+        detectorCheckNextSource();
         LL_mDelay(500);
+        DetectedSignalSource detectedSources = detectorGetFound();
+        if ((detectedSources & DetectedSignalSource1) != DetectedSignalSourceNone) {
+            LL_GPIO_ResetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
+        } else {
+            LL_GPIO_SetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
+        }
+        if ((detectedSources & DetectedSignalSource2) != DetectedSignalSourceNone) {
+            LL_GPIO_ResetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
+        } else {
+            LL_GPIO_SetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
+        }
+        if ((detectedSources & DetectedSignalSource3) != DetectedSignalSourceNone) {
+            LL_GPIO_ResetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
+        } else {
+            LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
+        }
+        // detectorSelectSource(SignalSource3);
+        // LL_mDelay(100);
 
         LL_TIM_DisableCounter(TIM1);
         int button = remoteGetButton();
