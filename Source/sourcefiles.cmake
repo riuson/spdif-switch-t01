@@ -7,6 +7,7 @@ set(CPP_SOURCES
 
     ${SRCDIR}/Core/Src/gpio.c
     ${SRCDIR}/Core/Src/main.c
+    ${SRCDIR}/Core/Src/remote.c
     ${SRCDIR}/Core/Src/stm32f0xx_it.c
     ${SRCDIR}/Core/Src/tim.c
     ${SRCDIR}/Core/Src/usart.c

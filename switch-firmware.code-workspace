@@ -17,7 +17,15 @@
 		"cortex-debug.gdbPath": "${workspaceRoot}/Tools/gcc/bin/arm-none-eabi-gdb.exe",
 		"files.associations": {
 			"*.makedefs": "makefile",
-			"stm32f030x6.h": "c"
+			"stm32f030x6.h": "c",
+			"algorithm": "c",
+			"bitset": "c",
+			"iterator": "c",
+			"xhash": "c",
+			"xmemory": "c",
+			"xtree": "c",
+			"xutility": "c",
+			"format": "c"
 		},
 		"cortex-debug.liveWatchRefreshRate": 2000,
 		"cortex-debug.dbgServerLogfile": "${workspaceRoot}/jlink.log",
