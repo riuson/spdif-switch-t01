@@ -117,7 +117,7 @@ static int selectorGetFirstAvailableSource(void) {
         return RouterSource1;
     } else if ((stateDetectedSources & DetectedSource2) != DetectedSourceNone) {
         return RouterSource2;
-    } else if ((stateDetectedSources & DetectedSource2) != DetectedSourceNone) {
+    } else if ((stateDetectedSources & DetectedSource3) != DetectedSourceNone) {
         return RouterSource3;
     }
 
