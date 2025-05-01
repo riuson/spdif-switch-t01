@@ -97,10 +97,7 @@ int main(void) {
     MX_TIM1_Init();
     // MX_USART1_UART_Init();
     /* USER CODE BEGIN 2 */
-    LL_GPIO_SetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
-    LL_GPIO_SetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
-    LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
-
+    routerSelect(RouterSourceNone);
     remoteInit();
     detectorInit();
     /* USER CODE END 2 */
