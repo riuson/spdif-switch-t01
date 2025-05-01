@@ -113,6 +113,7 @@ int main(void) {
         RCButton remoteButton = remoteGetButton();
         selectorSetRCButton(remoteButton);
         selectorSetDetectedSources(detectedSources);
+        selectorSetLocalButton(!LL_GPIO_IsInputPinSet(BUTTON_GPIO_Port, BUTTON_Pin));
         routerSelect(selectorGetRouterSource());
     }
 
