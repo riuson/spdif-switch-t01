@@ -108,7 +108,7 @@ int main(void) {
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */
         detectorCheckNextSource();
-        LL_mDelay(500);
+        LL_mDelay(100);
         DetectedSource detectedSources = detectorGetFound();
         RCButton remoteButton = remoteGetButton();
         selectorSetRCButton(remoteButton);
