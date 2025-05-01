@@ -3,37 +3,39 @@
 
 static int stateLocalButton = 0;
 static DetectedSource stateDetectedSources;
-static UserSource stateUserSource = UserSourceAuto;
+static UserSource stateUserSource = UserSourceAutoPriority;
 static RouterSource stateLastSelectedSource = RouterSourceNone;
 
 static int selectorCheckSourceAvailable(RouterSource source);
 static int selectorGetFirstAvailableSource(void);
-static void selectorHighlightAutoSource(int enable);
+static void selectorHighlightAutoSource(UserSource source);
 
 void selectorSetLocalButton(int buttonState) {
     if (stateLocalButton == 0 && buttonState != 0) {
         switch (stateUserSource) {
             case UserSource1: {
-                selectorHighlightAutoSource(0);
                 stateUserSource = UserSource2;
                 break;
             }
             case UserSource2: {
-                selectorHighlightAutoSource(0);
                 stateUserSource = UserSource3;
                 break;
             }
             case UserSource3: {
-                selectorHighlightAutoSource(1);
-                stateUserSource = UserSourceAuto;
+                stateUserSource = UserSourceAutoKeep;
                 break;
             }
-            case UserSourceAuto: {
-                selectorHighlightAutoSource(0);
+            case UserSourceAutoKeep: {
+                stateUserSource = UserSourceAutoPriority;
+                break;
+            }
+            case UserSourceAutoPriority: {
                 stateUserSource = UserSource1;
                 break;
             }
         }
+
+        selectorHighlightAutoSource(stateUserSource);
     }
     stateLocalButton = buttonState;
 }
@@ -56,8 +58,13 @@ void selectorSetRCButton(RCButton button) {
             break;
         }
         case RCButtonAuto: {
-            selectorHighlightAutoSource(1);
-            stateUserSource = UserSourceAuto;
+            if (stateUserSource == UserSourceAutoKeep) {
+                stateUserSource = UserSourceAutoPriority;
+            } else {
+                stateUserSource = UserSourceAutoKeep;
+            }
+
+            selectorHighlightAutoSource(stateUserSource);
             break;
         }
         default: {
@@ -86,11 +93,17 @@ RouterSource selectorGetRouterSource(void) {
             return RouterSource3;
         }
         default:
-        case UserSourceAuto: {
+        case UserSourceAutoKeep: {
             // Auto selection.
             if (selectorCheckSourceAvailable(stateLastSelectedSource) == 0) {
                 stateLastSelectedSource = selectorGetFirstAvailableSource();
             }
+
+            return stateLastSelectedSource;
+        }
+        case UserSourceAutoPriority: {
+            // Auto selection.
+            stateLastSelectedSource = selectorGetFirstAvailableSource();
             return stateLastSelectedSource;
         }
     }
@@ -124,10 +137,31 @@ static int selectorGetFirstAvailableSource(void) {
     return RouterSourceNone;
 }
 
-static void selectorHighlightAutoSource(int enable) {
-    if (enable != 0) {
-        LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
-    } else {
-        LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+static void selectorHighlightAutoSource(UserSource source) {
+    switch (source) {
+        case UserSourceAutoKeep: {
+            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            break;
+        }
+        case UserSourceAutoPriority: {
+            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            break;
+        }
+        default: {
+            LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            break;
+        }
     }
 }
