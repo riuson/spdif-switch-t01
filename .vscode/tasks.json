@@ -9,7 +9,7 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "--preset=debug",
+                "--preset=Debug",
                 "--target=firmware"
             ]
         },
@@ -19,7 +19,7 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "--preset=release",
+                "--preset=Release",
                 "--target=firmware"
             ]
         },
@@ -29,7 +29,7 @@
             "command": "cmake",
             "args": [
                 "--fresh",
-                "--preset=debug"
+                "--preset=Debug"
             ]
         },
         {
@@ -38,7 +38,7 @@
             "command": "cmake",
             "args": [
                 "--fresh",
-                "--preset=release"
+                "--preset=Release"
             ]
         }
     ]

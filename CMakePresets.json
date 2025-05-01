@@ -15,11 +15,11 @@
             "description": "Default build using Ninja generator",
             "inherits": "machine_dependent_configuration",
             "hidden": true,
-            "binaryDir": "${sourceDir}/build/${presetName}",
+            "binaryDir": "${sourceDir}/Build/${presetName}",
             "toolchainFile": "${sourceDir}/gcc-toolchain.cmake"
         },
         {
-            "name": "debug",
+            "name": "Debug",
             "displayName": "Debug",
             "inherits": "default",
             "cacheVariables": {
@@ -27,7 +27,7 @@
             }
         },
         {
-            "name": "release",
+            "name": "Release",
             "displayName": "Release",
             "inherits": "default",
             "cacheVariables": {
@@ -37,18 +37,18 @@
     ],
     "buildPresets": [
         {
-            "name": "debug",
+            "name": "Debug",
             "displayName": "Build",
-            "configurePreset": "debug",
+            "configurePreset": "Debug",
             "jobs": 16,
             "targets": [
                 "firmware"
             ]
         },
         {
-            "name": "release",
+            "name": "Release",
             "displayName": "Build",
-            "configurePreset": "release",
+            "configurePreset": "Release",
             "jobs": 16,
             "targets": [
                 "firmware"
