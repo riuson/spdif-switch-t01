@@ -100,6 +100,14 @@ int main(void) {
     routerSelect(RouterSourceNone);
     remoteInit();
     detectorInit();
+
+    // Pre-detect sources.
+    detectorCheckNextSource();
+    LL_mDelay(100);
+    detectorCheckNextSource();
+    LL_mDelay(100);
+    detectorCheckNextSource();
+    LL_mDelay(100);
     /* USER CODE END 2 */
 
     /* Infinite loop */
