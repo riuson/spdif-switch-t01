@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/debug/firmware.elf",
+            "svdFile": "${workspaceFolder}/.vscode/STM32F0x0.svd",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "jlink",
+            "device": "STM32F030F4",
+            "interface": "swd",
+            "ipAddress": null,
+            "serialNumber": null,
+            "showDevDebugOutput": "raw",
+            "loadFiles": [
+                "${workspaceFolder}/build/debug/firmware.elf"
+            ]
+        }
+    ]
+}

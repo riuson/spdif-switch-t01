@@ -7,12 +7,28 @@
 	"settings": {
 		"C_Cpp.formatting": "Disabled",
 		"cortex-debug.enableTelemetry": false,
-		"cortex-debug.JLinkGDBServerPath": "${workspaceRoot}/Tools/JLink/JLinkGDBServerCL.exe",
+		"cortex-debug.JLinkGDBServerPath": "C:/Users/Vladimir/SEGGER/JLink/JLinkGDBServerCL.exe",
 		"c-cpp-flylint.clang.enable": false,
 		"c-cpp-flylint.flexelint.enable": false,
 		"c-cpp-flylint.standard": [
 			"c11",
 			"c++17"
 		],
+		"cortex-debug.gdbPath": "${workspaceRoot}/Tools/gcc/bin/arm-none-eabi-gdb.exe",
+		"files.associations": {
+			"*.makedefs": "makefile",
+			"stm32f030x6.h": "c",
+			"algorithm": "c",
+			"bitset": "c",
+			"iterator": "c",
+			"xhash": "c",
+			"xmemory": "c",
+			"xtree": "c",
+			"xutility": "c",
+			"format": "c",
+			"router.h": "c"
+		},
+		"cortex-debug.liveWatchRefreshRate": 2000,
+		"cortex-debug.dbgServerLogfile": "${workspaceRoot}/jlink.log",
 	}
 }

@@ -1,0 +1,10 @@
+set(INCDIR ${CMAKE_CURRENT_LIST_DIR})
+
+include_directories(${INCDIR})
+include_directories(${INCDIR}/Core/Inc)
+# include_directories(${INCDIR}/Drivers)
+# include_directories(${INCDIR}/Drivers/CMSIS)
+include_directories(${INCDIR}/Drivers/CMSIS/Core/Include)
+include_directories(${INCDIR}/Drivers/CMSIS/Device/ST/STM32F0xx/Include)
+include_directories(${INCDIR}/Drivers/CMSIS/Include)
+include_directories(${INCDIR}/Drivers/STM32F0xx_HAL_Driver/Inc)

@@ -1,17 +1,18 @@
 cmake_minimum_required(VERSION 3.29)
 
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/source/gcc-toolchain.cmake)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Source/gcc-toolchain.cmake)
 
 project(firmware LANGUAGES ASM C CXX)
 
 set(CMAKE_VERBOSE_MAKEFILE off)
 include(CMakePrintHelpers)
 
-include(${PROJECT_SOURCE_DIR}/source/gcc.cmake)
+include(${PROJECT_SOURCE_DIR}/Source/gcc.cmake)
 set(TARGET_NAME firmware)
 
 set(allowableBuildTypes Debug DebugApp Release ReleaseApp)
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${allowableBuildTypes}")
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
 elseif()
@@ -20,27 +21,26 @@ elseif()
     endif()
 endif()
 
-
 include_directories(${PROJECT_SOURCE_DIR})
-include(${PROJECT_SOURCE_DIR}/source/headerdirs.cmake)
-include(${PROJECT_SOURCE_DIR}/source/sourcefiles.cmake)
+include(${PROJECT_SOURCE_DIR}/Source/headerdirs.cmake)
+include(${PROJECT_SOURCE_DIR}/Source/sourcefiles.cmake)
 
-if (CMAKE_BUILD_TYPE MATCHES "^Debug" OR CMAKE_BUILD_TYPE MATCHES "^Release")
-    if (CMAKE_BUILD_TYPE MATCHES "^Release")
+if(CMAKE_BUILD_TYPE MATCHES "^Debug" OR CMAKE_BUILD_TYPE MATCHES "^Release")
+    if(CMAKE_BUILD_TYPE MATCHES "^Release")
         option(ACTUAL_BUILD_TIMESTAMP "Actualize build timestamp" ON)
     endif()
 
-    if (CMAKE_BUILD_TYPE MATCHES "^Debug")
+    if(CMAKE_BUILD_TYPE MATCHES "^Debug")
         option(IS_DEBUG "Is debug version" ON)
         option(IS_RELEASE "Is release version" OFF)
-    elseif (CMAKE_BUILD_TYPE MATCHES "^Release")
+    elseif(CMAKE_BUILD_TYPE MATCHES "^Release")
         option(IS_DEBUG "Is debug version" OFF)
         option(IS_RELEASE "Is release version" ON)
     endif()
 
     set(LIST_SOURCES
         ${CPP_SOURCES}
-        )
+    )
 
     add_executable(${TARGET_NAME}
         ${LIST_SOURCES})
@@ -50,7 +50,12 @@ if (CMAKE_BUILD_TYPE MATCHES "^Debug" OR CMAKE_BUILD_TYPE MATCHES "^Release")
 
     add_custom_command(TARGET ${TARGET_NAME}
         POST_BUILD
-        COMMAND ${SIZE_EXECUTABLE} --format=berkeley ${TARGET_NAME}.elf
-        COMMAND ${OBJDUMP_EXECUTABLE} --source --all-headers --demangle --line-numbers --wide ${TARGET_NAME}.elf > ${TARGET_NAME}.lst
+        COMMENT "Generating ELF files"
+        COMMAND ${SIZE_EXECUTABLE} --format=berkeley ${PROJECT_NAME}.elf
+        COMMENT "Generating LST files"
+        COMMAND ${OBJDUMP_EXECUTABLE} --source --all-headers --demangle --line-numbers --wide ${PROJECT_NAME}.elf > ${PROJECT_NAME}.lst
+        COMMENT "Generating HEX/BIN files"
+        COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.hex
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
     )
-endif ()
+endif()
