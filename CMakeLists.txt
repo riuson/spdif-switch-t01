@@ -50,7 +50,12 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug" OR CMAKE_BUILD_TYPE MATCHES "^Release")
 
     add_custom_command(TARGET ${TARGET_NAME}
         POST_BUILD
+        COMMENT "Generating ELF files"
         COMMAND ${SIZE_EXECUTABLE} --format=berkeley ${PROJECT_NAME}.elf
+        COMMENT "Generating LST files"
         COMMAND ${OBJDUMP_EXECUTABLE} --source --all-headers --demangle --line-numbers --wide ${PROJECT_NAME}.elf > ${PROJECT_NAME}.lst
+        COMMENT "Generating HEX/BIN files"
+        COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.hex
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
     )
 endif()
