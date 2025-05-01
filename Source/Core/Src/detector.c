@@ -19,22 +19,22 @@ void detectorCheckNextSource() {
     int isDetected = (interruptsCounter > 90) ? 1 : 0;
 
     switch (currentSignalSource) {
-    default:
-    case DetectedSource1: {
-        signalSourceStates[0] = isDetected;
-        currentSignalSource = DetectedSource2;
-        break;
-    }
-    case DetectedSource2: {
-        signalSourceStates[1] = isDetected;
-        currentSignalSource = DetectedSource3;
-        break;
-    }
-    case DetectedSource3: {
-        signalSourceStates[2] = isDetected;
-        currentSignalSource = DetectedSource1;
-        break;
-    }
+        default:
+        case DetectedSource1: {
+            signalSourceStates[0] = isDetected;
+            currentSignalSource = DetectedSource2;
+            break;
+        }
+        case DetectedSource2: {
+            signalSourceStates[1] = isDetected;
+            currentSignalSource = DetectedSource3;
+            break;
+        }
+        case DetectedSource3: {
+            signalSourceStates[2] = isDetected;
+            currentSignalSource = DetectedSource1;
+            break;
+        }
     }
 
     detectorSelectSource(currentSignalSource);
@@ -62,22 +62,22 @@ DetectedSource detectorGetFound(void) {
 
 static void detectorSelectSource(DetectedSource source) {
     switch (source) {
-    default:
-    case DetectedSource1: {
-        LL_GPIO_SetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
-        LL_GPIO_SetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
-        break;
-    }
-    case DetectedSource2: {
-        LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
-        LL_GPIO_SetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
-        break;
-    }
-    case DetectedSource3: {
-        LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
-        LL_GPIO_ResetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
-        break;
-    }
+        default:
+        case DetectedSource1: {
+            LL_GPIO_SetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
+            LL_GPIO_SetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
+            break;
+        }
+        case DetectedSource2: {
+            LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
+            LL_GPIO_SetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
+            break;
+        }
+        case DetectedSource3: {
+            LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
+            LL_GPIO_ResetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
+            break;
+        }
     }
 }
 

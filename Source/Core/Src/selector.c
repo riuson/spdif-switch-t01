@@ -13,26 +13,26 @@ static void selectorHighlightAutoSource(int enable);
 void selectorSetLocalButton(int buttonState) {
     if (stateLocalButton == 0 && buttonState != 0) {
         switch (stateUserSource) {
-        case UserSource1: {
-            selectorHighlightAutoSource(0);
-            stateUserSource = UserSource2;
-            break;
-        }
-        case UserSource2: {
-            selectorHighlightAutoSource(0);
-            stateUserSource = UserSource3;
-            break;
-        }
-        case UserSource3: {
-            selectorHighlightAutoSource(1);
-            stateUserSource = UserSourceAuto;
-            break;
-        }
-        case UserSourceAuto: {
-            selectorHighlightAutoSource(0);
-            stateUserSource = UserSource1;
-            break;
-        }
+            case UserSource1: {
+                selectorHighlightAutoSource(0);
+                stateUserSource = UserSource2;
+                break;
+            }
+            case UserSource2: {
+                selectorHighlightAutoSource(0);
+                stateUserSource = UserSource3;
+                break;
+            }
+            case UserSource3: {
+                selectorHighlightAutoSource(1);
+                stateUserSource = UserSourceAuto;
+                break;
+            }
+            case UserSourceAuto: {
+                selectorHighlightAutoSource(0);
+                stateUserSource = UserSource1;
+                break;
+            }
         }
     }
     stateLocalButton = buttonState;
@@ -40,29 +40,29 @@ void selectorSetLocalButton(int buttonState) {
 
 void selectorSetRCButton(RCButton button) {
     switch (button) {
-    case RCButton1: {
-        selectorHighlightAutoSource(0);
-        stateUserSource = UserSource1;
-        break;
-    }
-    case RCButton2: {
-        selectorHighlightAutoSource(0);
-        stateUserSource = UserSource2;
-        break;
-    }
-    case RCButton3: {
-        selectorHighlightAutoSource(0);
-        stateUserSource = UserSource3;
-        break;
-    }
-    case RCButtonAuto: {
-        selectorHighlightAutoSource(1);
-        stateUserSource = UserSourceAuto;
-        break;
-    }
-    default: {
-        break;
-    }
+        case RCButton1: {
+            selectorHighlightAutoSource(0);
+            stateUserSource = UserSource1;
+            break;
+        }
+        case RCButton2: {
+            selectorHighlightAutoSource(0);
+            stateUserSource = UserSource2;
+            break;
+        }
+        case RCButton3: {
+            selectorHighlightAutoSource(0);
+            stateUserSource = UserSource3;
+            break;
+        }
+        case RCButtonAuto: {
+            selectorHighlightAutoSource(1);
+            stateUserSource = UserSourceAuto;
+            break;
+        }
+        default: {
+            break;
+        }
     }
 }
 
@@ -70,45 +70,45 @@ void selectorSetDetectedSources(DetectedSource sources) { stateDetectedSources =
 
 RouterSource selectorGetRouterSource(void) {
     switch (stateUserSource) {
-    case UserSource1: {
-        // Manual selection.
-        stateLastSelectedSource = RouterSource1;
-        return RouterSource1;
-    }
-    case UserSource2: {
-        // Manual selection.
-        stateLastSelectedSource = RouterSource2;
-        return RouterSource2;
-    }
-    case UserSource3: {
-        // Manual selection.
-        stateLastSelectedSource = RouterSource3;
-        return RouterSource3;
-    }
-    default:
-    case UserSourceAuto: {
-        // Auto selection.
-        if (selectorCheckSourceAvailable(stateLastSelectedSource) == 0) {
-            stateLastSelectedSource = selectorGetFirstAvailableSource();
+        case UserSource1: {
+            // Manual selection.
+            stateLastSelectedSource = RouterSource1;
+            return RouterSource1;
         }
-        return stateLastSelectedSource;
-    }
+        case UserSource2: {
+            // Manual selection.
+            stateLastSelectedSource = RouterSource2;
+            return RouterSource2;
+        }
+        case UserSource3: {
+            // Manual selection.
+            stateLastSelectedSource = RouterSource3;
+            return RouterSource3;
+        }
+        default:
+        case UserSourceAuto: {
+            // Auto selection.
+            if (selectorCheckSourceAvailable(stateLastSelectedSource) == 0) {
+                stateLastSelectedSource = selectorGetFirstAvailableSource();
+            }
+            return stateLastSelectedSource;
+        }
     }
 }
 
 static int selectorCheckSourceAvailable(RouterSource source) {
     switch (source) {
-    case RouterSource1: {
-        return ((stateDetectedSources & DetectedSource1) != DetectedSourceNone) ? 1 : 0;
-    }
-    case RouterSource2: {
-        return ((stateDetectedSources & DetectedSource2) != DetectedSourceNone) ? 1 : 0;
-    }
-    case RouterSource3: {
-        return ((stateDetectedSources & DetectedSource3) != DetectedSourceNone) ? 1 : 0;
-    }
-    default:
-        return 0;
+        case RouterSource1: {
+            return ((stateDetectedSources & DetectedSource1) != DetectedSourceNone) ? 1 : 0;
+        }
+        case RouterSource2: {
+            return ((stateDetectedSources & DetectedSource2) != DetectedSourceNone) ? 1 : 0;
+        }
+        case RouterSource3: {
+            return ((stateDetectedSources & DetectedSource3) != DetectedSourceNone) ? 1 : 0;
+        }
+        default:
+            return 0;
     }
 }
 

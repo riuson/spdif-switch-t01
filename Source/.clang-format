@@ -17,3 +17,5 @@ InsertBraces: true
 AlignTrailingComments:
   Kind: Always
   OverEmptyLines: 2
+
+IndentCaseLabels: true
