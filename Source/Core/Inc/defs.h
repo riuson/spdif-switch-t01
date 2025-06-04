@@ -1,5 +1,4 @@
-#ifndef DEFS_H
-#define DEFS_H
+#pragma once
 
 typedef enum {
     DetectedSourceNone = 0,
@@ -30,5 +29,3 @@ typedef enum {
     UserSourceAutoKeep,
     UserSourceAutoPriority,
 } UserSource;
-
-#endif // DEFS_H
