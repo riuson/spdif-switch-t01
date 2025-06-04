@@ -8,6 +8,7 @@ set(CPP_SOURCES
     ${SRCDIR}/Core/Src/detector.c
     ${SRCDIR}/Core/Src/gpio.c
     ${SRCDIR}/Core/Src/main.c
+    ${SRCDIR}/Core/Src/nv.c
     ${SRCDIR}/Core/Src/remote.c
     ${SRCDIR}/Core/Src/router.c
     ${SRCDIR}/Core/Src/selector.c
