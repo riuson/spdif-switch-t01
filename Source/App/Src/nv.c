@@ -15,16 +15,12 @@
 #define PageSize (1024)
 #define ItemsOnPage (PageSize / sizeof(uint16_t))
 
-static volatile const
-    __attribute__((section(".storage_space_1"))) uint16_t StorageSpace1[ItemsOnPage]
-    = { 0 };
-static volatile const
-    __attribute__((section(".storage_space_2"))) uint16_t StorageSpace2[ItemsOnPage]
-    = { 0 };
-
 volatile FLASH_TypeDef* Flash = (volatile FLASH_TypeDef*)FLASH_R_BASE;
 
 typedef enum { First = 14, Second = 15 } Page;
+
+static const size_t Page1Address = FLASH_BASE + ((uint16_t)First) * 1024;
+static const size_t Page2Address = FLASH_BASE + ((uint16_t)Second) * 1024;
 
 static Page CurrentPage = 0;
 
@@ -45,22 +41,31 @@ bool nvInit(void) {
 
     if (isFirstErased && isSecondErased) {
         CurrentPage = First;
+        result = true;
     } else if (isFirstErased && !isSecondErased) {
-        CurrentPage = First;
-    } else if (!isFirstErased && isSecondErased) {
         CurrentPage = Second;
+        result = true;
+    } else if (!isFirstErased && isSecondErased) {
+        CurrentPage = First;
+        result = true;
     } else if (!isFirstErased && !isSecondErased) {
-        size_t offsetFirst, offsetSecond;
+        size_t offsetFirst = 0, offsetSecond = 0;
         uint16_t _;
 
         nvGetLast(First, &offsetFirst, &_);
         nvGetLast(Second, &offsetSecond, &_);
 
         if (offsetFirst < offsetSecond) {
-            nvErasePage(Second);
+            if (nvErasePage(Second)) {
+                result = true;
+            }
+
             CurrentPage = First;
         } else {
-            nvErasePage(First);
+            if (nvErasePage(First)) {
+                result = true;
+            }
+
             CurrentPage = Second;
         }
     }
@@ -101,6 +106,8 @@ bool nvSetState(UserSource value) {
                 result = true;
             }
         }
+    } else {
+        result = nvWriteWord(CurrentPage, offset, (uint16_t)value);
     }
 
     return result;
@@ -185,7 +192,8 @@ static uint16_t nvReadWord(Page page, size_t offset) {
     assert(page == First || page == Second);
     assert(offset < ItemsOnPage);
 
-    volatile const uint16_t* p = (page == First) ? StorageSpace1 : StorageSpace2;
+    volatile const uint16_t* p
+        = (volatile const uint16_t*)((page == First) ? Page1Address : Page2Address);
     p += offset;
     return *p;
 }
@@ -194,14 +202,18 @@ static bool nvWriteWord(Page page, size_t offset, uint16_t value) {
     assert(page == First || page == Second);
     assert(offset < ItemsOnPage);
 
+    nvUnlock();
+
     Flash->CR |= FLASH_CR_PG;
 
-    volatile uint16_t* p = (volatile uint16_t*)((page == First) ? StorageSpace1 : StorageSpace2);
+    volatile uint16_t* p = (volatile uint16_t*)((page == First) ? Page1Address : Page2Address);
     p += offset;
     *p = value;
     bool result = nvWait();
 
     Flash->CR &= ~FLASH_CR_PG;
+
+    nvLock();
 
     if (nvReadWord(page, offset) != value) {
         return false;
