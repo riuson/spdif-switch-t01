@@ -1,6 +1,7 @@
 set(INCDIR ${CMAKE_CURRENT_LIST_DIR})
 
 include_directories(${INCDIR})
+include_directories(${INCDIR}/App/Inc)
 include_directories(${INCDIR}/Core/Inc)
 # include_directories(${INCDIR}/Drivers)
 # include_directories(${INCDIR}/Drivers/CMSIS)

@@ -14,7 +14,7 @@ include(CMakePrintHelpers)
 include(${PROJECT_SOURCE_DIR}/Source/gcc.cmake)
 set(TARGET_NAME firmware)
 
-set(allowableBuildTypes Debug DebugApp Release ReleaseApp)
+set(allowableBuildTypes Debug Release)
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${allowableBuildTypes}")
 
 if(NOT CMAKE_BUILD_TYPE)
