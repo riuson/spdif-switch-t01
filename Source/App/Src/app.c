@@ -17,6 +17,10 @@ void app(void) {
     routerSelect(RouterSourceNone);
     remoteInit();
     detectorInit();
+    nvInit();
+
+    UserSource userSource = nvGetState();
+    selectorSetUserSelection(userSource);
 
     // Pre-detect sources.
     detectorCheckNextSource();
@@ -36,5 +40,12 @@ void app(void) {
         selectorSetDetectedSources(detectedSources);
         selectorSetLocalButton(!LL_GPIO_IsInputPinSet(BUTTON_GPIO_Port, BUTTON_Pin));
         routerSelect(selectorGetRouterSource());
+
+        UserSource newUserSource = selectorGetUserSelection();
+
+        if (newUserSource != userSource) {
+            nvSetState(newUserSource);
+            userSource = newUserSource;
+        }
     }
 }
