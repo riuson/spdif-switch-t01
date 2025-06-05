@@ -1,8 +1,9 @@
 #pragma once
 
 #include "defs.h"
+#include <stdbool.h>
 #include <stdint.h>
 
-void nvInit(void);
+bool nvInit(void);
 UserSource nvGetState(void);
-void nvSetState(UserSource value);
+bool nvSetState(UserSource value);
