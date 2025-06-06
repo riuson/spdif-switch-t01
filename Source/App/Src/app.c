@@ -30,8 +30,9 @@ void app(void) {
         }
     }
 
-    UserSource userSource = nvGetState();
-    selectorSetUserSelection(userSource);
+    UserSource savedUserSource = nvGetState();
+    UserSource lastUserSource = savedUserSource;
+    selectorSetUserSelection(savedUserSource);
 
     // Pre-detect sources.
     detectorCheckNextSource();
@@ -41,8 +42,10 @@ void app(void) {
     detectorCheckNextSource();
     LL_mDelay(100);
 
+    size_t loopCounter = 0;
+
     // Infinite loop
-    while (1) {
+    while (true) {
         detectorCheckNextSource();
         LL_mDelay(100);
         DetectedSource detectedSources = detectorGetFound();
@@ -54,10 +57,26 @@ void app(void) {
 
         UserSource newUserSource = selectorGetUserSelection();
 
-        if (nvOk) {
-            if (newUserSource != userSource) {
-                nvOk = nvSetState(newUserSource);
-                userSource = newUserSource;
+        // If state changed, start delay.
+        if (newUserSource != lastUserSource) {
+            lastUserSource = newUserSource;
+            loopCounter = 1;
+        }
+
+        // If delay started, count cycles.
+        if (loopCounter > 0) {
+            loopCounter++;
+        }
+
+        // Then cycles elapsed, write changes and stop counter.
+        if (loopCounter > 200) {
+            loopCounter = 0;
+
+            if (nvOk) {
+                if (newUserSource != savedUserSource) {
+                    nvOk = nvSetState(newUserSource);
+                    savedUserSource = newUserSource;
+                }
             }
         }
     }
