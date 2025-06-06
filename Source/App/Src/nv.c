@@ -23,6 +23,7 @@ static const size_t Page1Address = FLASH_BASE + ((uint16_t)First) * 1024;
 static const size_t Page2Address = FLASH_BASE + ((uint16_t)Second) * 1024;
 
 static Page CurrentPage = 0;
+static uint16_t wearCycle = 0;
 
 static bool nvLock(void);
 static bool nvUnlock(void);
@@ -79,7 +80,8 @@ UserSource nvGetState(void) {
     uint16_t value;
 
     if (nvGetLast(CurrentPage, &_, &value)) {
-        result = (UserSource)value;
+        wearCycle = (value >> 3) & 0x1FFF;
+        result = (UserSource)(value & 0x7);
     }
 
     return result;
@@ -95,19 +97,28 @@ bool nvSetState(UserSource value) {
         offset += 1;
 
         if (offset < ItemsOnPage) {
-            result = nvWriteWord(CurrentPage, offset, (uint16_t)value);
+            uint16_t word = (uint16_t)value;
+            word = (word & 0x7) | (wearCycle << 3);
+            result = nvWriteWord(CurrentPage, offset, word);
         } else {
+            uint16_t newWearCycle = wearCycle + 1;
+            uint16_t word = (uint16_t)value;
+            word = (word & 0x7) | (newWearCycle << 3);
+
             Page anotherPage = (CurrentPage == First) ? Second : First;
-            bool isWritten = nvWriteWord(anotherPage, 0, (uint16_t)value);
+            bool isWritten = nvWriteWord(anotherPage, 0, word);
             bool isErased = nvErasePage(CurrentPage);
 
             if (isWritten && isErased) {
                 CurrentPage = anotherPage;
+                wearCycle = newWearCycle;
                 result = true;
             }
         }
     } else {
-        result = nvWriteWord(CurrentPage, offset, (uint16_t)value);
+        uint16_t word = (uint16_t)value;
+        word = (word & 0x7) | (wearCycle << 3);
+        result = nvWriteWord(CurrentPage, offset, word);
     }
 
     return result;
