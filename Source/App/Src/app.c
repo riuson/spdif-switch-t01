@@ -1,6 +1,7 @@
 #include "app.h"
 
 #include "stm32f0xx.h"
+#include <stddef.h>
 
 #include "gpio.h"
 #include "tim.h"
@@ -17,7 +18,17 @@ void app(void) {
     routerSelect(RouterSourceNone);
     remoteInit();
     detectorInit();
-    nvInit();
+    bool nvOk = nvInit();
+
+    // Indicate NV error.
+    if (!nvOk) {
+        for (size_t i = 0; i < 10; ++i) {
+            LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+            LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+            LL_mDelay(100);
+        }
+    }
 
     UserSource userSource = nvGetState();
     selectorSetUserSelection(userSource);
@@ -43,9 +54,11 @@ void app(void) {
 
         UserSource newUserSource = selectorGetUserSelection();
 
-        if (newUserSource != userSource) {
-            nvSetState(newUserSource);
-            userSource = newUserSource;
+        if (nvOk) {
+            if (newUserSource != userSource) {
+                nvOk = nvSetState(newUserSource);
+                userSource = newUserSource;
+            }
         }
     }
 }
