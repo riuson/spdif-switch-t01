@@ -1,4 +1,4 @@
-# Embedded software for [Toslink Switcher T01](https://cooidea.co/ToslinkSwitcher/T01.html).
+# Embedded software for [Toslink Switcher T01](https://cooidea.co/ToslinkSwitcher/T01.html)
 
 ## Original product
 
@@ -26,3 +26,10 @@ The second mode is prioritised:
 - If the first source is present, it is selected, otherwise the second source is checked.
 - If the second source is present, it is selected, otherwise the third source is checked.
 - If the third source is present, it is selected, otherwise everything is switched off.
+
+### v1.2.0
+
+Selected state save to flash with 20 seconds delay and restored on startup.
+
+NOTE: Taking into account the availability of approximately 1000 erase cycles for the program memory, this makes it possible to save the selected state approximately 1 million times.
+However, use at your own risk. Although, given the low cost of this microcontroller, this is not a big deal.
