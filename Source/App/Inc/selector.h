@@ -1,5 +1,4 @@
-#ifndef SELECTOR_H
-#define SELECTOR_H
+#pragma once
 
 #include "defs.h"
 #include <stdint.h>
@@ -9,4 +8,5 @@ void selectorSetRCButton(RCButton button);
 void selectorSetDetectedSources(DetectedSource sources);
 RouterSource selectorGetRouterSource(void);
 
-#endif // SELECTOR_H
+UserSource selectorGetUserSelection(void);
+void selectorSetUserSelection(UserSource value);

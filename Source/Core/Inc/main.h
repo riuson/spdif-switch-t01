@@ -47,7 +47,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "pins.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -73,24 +73,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define CHANNEL_SELECT_1_Pin LL_GPIO_PIN_0
-#define CHANNEL_SELECT_1_GPIO_Port GPIOF
-#define CHANNEL_SELECT_2_Pin LL_GPIO_PIN_1
-#define CHANNEL_SELECT_2_GPIO_Port GPIOF
-#define CHANNEL_SELECT_3_Pin LL_GPIO_PIN_0
-#define CHANNEL_SELECT_3_GPIO_Port GPIOA
-#define MUX_SENS_0_Pin LL_GPIO_PIN_1
-#define MUX_SENS_0_GPIO_Port GPIOA
-#define MUX_SENS_1_Pin LL_GPIO_PIN_4
-#define MUX_SENS_1_GPIO_Port GPIOA
-#define LED_AUTO_Pin LL_GPIO_PIN_5
-#define LED_AUTO_GPIO_Port GPIOA
-#define SENS_INPUT_Pin LL_GPIO_PIN_7
-#define SENS_INPUT_GPIO_Port GPIOA
-#define REMOTE_INPUT_Pin LL_GPIO_PIN_9
-#define REMOTE_INPUT_GPIO_Port GPIOA
-#define BUTTON_Pin LL_GPIO_PIN_10
-#define BUTTON_GPIO_Port GPIOA
+
 #ifndef NVIC_PRIORITYGROUP_0
 #define NVIC_PRIORITYGROUP_0                                                                       \
     ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,                                   \

@@ -5,12 +5,15 @@ set(CPP_SOURCES
     ${SRCDIR}/Startup/syscalls_stub.c
     ${SRCDIR}/Startup/system_stm32f0xx.c
 
-    ${SRCDIR}/Core/Src/detector.c
+    ${SRCDIR}/App/Src/app.c
+    ${SRCDIR}/App/Src/detector.c
+    ${SRCDIR}/App/Src/nv.c
+    ${SRCDIR}/App/Src/remote.c
+    ${SRCDIR}/App/Src/router.c
+    ${SRCDIR}/App/Src/selector.c
+    
     ${SRCDIR}/Core/Src/gpio.c
     ${SRCDIR}/Core/Src/main.c
-    ${SRCDIR}/Core/Src/remote.c
-    ${SRCDIR}/Core/Src/router.c
-    ${SRCDIR}/Core/Src/selector.c
     ${SRCDIR}/Core/Src/stm32f0xx_it.c
     ${SRCDIR}/Core/Src/tim.c
     ${SRCDIR}/Core/Src/usart.c

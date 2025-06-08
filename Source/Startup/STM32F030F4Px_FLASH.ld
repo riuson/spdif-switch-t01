@@ -44,8 +44,9 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 /* Memories definition */
 MEMORY
 {
-  RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 4K
-  FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 16K
+  RAM      (rw)    : ORIGIN = 0x20000000,   LENGTH = 4K
+  FLASH    (rx)    : ORIGIN = 0x08000000,   LENGTH = 14K
+  STORAGE  (r)     : ORIGIN = 0x08003800,   LENGTH = 2K
 }
 
 /* Sections */
@@ -145,6 +146,16 @@ SECTIONS
     _edata = .;        /* define a global symbol at data end */
 
   } >RAM AT> FLASH
+
+  .storage_space_1 0x08003800 : {
+    KEEP(*(.storage_space_1))
+    KEEP(*(.storage_space_1*))
+  } >STORAGE
+
+  .storage_space_2 0x08003C00 : {
+    KEEP(*(.storage_space_2))
+    KEEP(*(.storage_space_2*))
+  } >STORAGE
 
   /* Uninitialized data section into "RAM" Ram type memory */
   . = ALIGN(4);

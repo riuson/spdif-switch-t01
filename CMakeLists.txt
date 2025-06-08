@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.28)
+
+if(CMAKE_VERSION VERSION_GREATER 3.30)
+  cmake_policy(SET CMP0175 NEW)
+endif()
 
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Source/gcc-toolchain.cmake)
 
@@ -10,7 +14,7 @@ include(CMakePrintHelpers)
 include(${PROJECT_SOURCE_DIR}/Source/gcc.cmake)
 set(TARGET_NAME firmware)
 
-set(allowableBuildTypes Debug DebugApp Release ReleaseApp)
+set(allowableBuildTypes Debug Release)
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${allowableBuildTypes}")
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -50,11 +54,9 @@ if(CMAKE_BUILD_TYPE MATCHES "^Debug" OR CMAKE_BUILD_TYPE MATCHES "^Release")
 
     add_custom_command(TARGET ${TARGET_NAME}
         POST_BUILD
-        COMMENT "Generating ELF files"
+        COMMENT "Generating ELF, LST, HEX/BIN files..."
         COMMAND ${SIZE_EXECUTABLE} --format=berkeley ${PROJECT_NAME}.elf
-        COMMENT "Generating LST files"
         COMMAND ${OBJDUMP_EXECUTABLE} --source --all-headers --demangle --line-numbers --wide ${PROJECT_NAME}.elf > ${PROJECT_NAME}.lst
-        COMMENT "Generating HEX/BIN files"
         COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.hex
         COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
     )

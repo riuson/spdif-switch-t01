@@ -24,11 +24,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "detector.h"
-#include "remote.h"
-#include "router.h"
-#include "selector.h"
+#include "app.h"
 #include "stm32f0xx.h"
+#include "remote.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,32 +95,15 @@ int main(void) {
     MX_TIM1_Init();
     // MX_USART1_UART_Init();
     /* USER CODE BEGIN 2 */
-    routerSelect(RouterSourceNone);
-    remoteInit();
-    detectorInit();
-
-    // Pre-detect sources.
-    detectorCheckNextSource();
-    LL_mDelay(100);
-    detectorCheckNextSource();
-    LL_mDelay(100);
-    detectorCheckNextSource();
-    LL_mDelay(100);
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
+    app();
+
     while (1) {
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */
-        detectorCheckNextSource();
-        LL_mDelay(100);
-        DetectedSource detectedSources = detectorGetFound();
-        RCButton remoteButton = remoteGetButton();
-        selectorSetRCButton(remoteButton);
-        selectorSetDetectedSources(detectedSources);
-        selectorSetLocalButton(!LL_GPIO_IsInputPinSet(BUTTON_GPIO_Port, BUTTON_Pin));
-        routerSelect(selectorGetRouterSource());
     }
 
     /* USER CODE END 3 */

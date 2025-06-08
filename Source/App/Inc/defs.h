@@ -1,5 +1,4 @@
-#ifndef DEFS_H
-#define DEFS_H
+#pragma once
 
 typedef enum {
     DetectedSourceNone = 0,
@@ -24,11 +23,9 @@ typedef enum {
 } RCButton;
 
 typedef enum {
-    UserSource1,
-    UserSource2,
-    UserSource3,
-    UserSourceAutoKeep,
-    UserSourceAutoPriority,
+    UserSource1 = 0,
+    UserSource2 = 1,
+    UserSource3 = 2,
+    UserSourceAutoKeep = 3,
+    UserSourceAutoPriority = 4,
 } UserSource;
-
-#endif // DEFS_H

@@ -109,6 +109,13 @@ RouterSource selectorGetRouterSource(void) {
     }
 }
 
+UserSource selectorGetUserSelection(void) { return stateUserSource; }
+
+void selectorSetUserSelection(UserSource value) {
+    stateUserSource = value;
+    selectorHighlightAutoSource(stateUserSource);
+}
+
 static int selectorCheckSourceAvailable(RouterSource source) {
     switch (source) {
         case RouterSource1: {
