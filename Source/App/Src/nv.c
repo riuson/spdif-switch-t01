@@ -117,7 +117,8 @@ bool nvSetState(UserSource value) {
         }
     } else {
         uint16_t word = (uint16_t)value;
-        word = (word & 0x7) | (wearCycle << 3);
+        word = (uint16_t)((word & 0x7) | (wearCycle << 3));
+        offset = 0;
         result = nvWriteWord(CurrentPage, offset, word);
     }
 

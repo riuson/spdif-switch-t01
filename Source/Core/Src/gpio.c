@@ -50,13 +50,13 @@ void MX_GPIO_Init(void) {
     LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
 
     /**/
-    LL_GPIO_ResetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
+    LL_GPIO_SetOutputPin(CHANNEL_SELECT_1_GPIO_Port, CHANNEL_SELECT_1_Pin);
 
     /**/
-    LL_GPIO_ResetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
+    LL_GPIO_SetOutputPin(CHANNEL_SELECT_2_GPIO_Port, CHANNEL_SELECT_2_Pin);
 
     /**/
-    LL_GPIO_ResetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
+    LL_GPIO_SetOutputPin(CHANNEL_SELECT_3_GPIO_Port, CHANNEL_SELECT_3_Pin);
 
     /**/
     LL_GPIO_ResetOutputPin(MUX_SENS_0_GPIO_Port, MUX_SENS_0_Pin);
@@ -65,7 +65,7 @@ void MX_GPIO_Init(void) {
     LL_GPIO_ResetOutputPin(MUX_SENS_1_GPIO_Port, MUX_SENS_1_Pin);
 
     /**/
-    LL_GPIO_ResetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
+    LL_GPIO_SetOutputPin(LED_AUTO_GPIO_Port, LED_AUTO_Pin);
 
     /**/
     GPIO_InitStruct.Pin = CHANNEL_SELECT_1_Pin;
