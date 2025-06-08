@@ -9,6 +9,7 @@ function(configure_compiler TARGET_NAME)
         $<$<BOOL:${IS_DEBUG}>:DEBUG=1 TRACE=1>
         STM32F030x8
         USE_FULL_LL_DRIVER
+        USE_FULL_ASSERT
     )
 
     target_compile_options(
